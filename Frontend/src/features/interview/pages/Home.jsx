@@ -76,14 +76,13 @@ const Home = () => {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', overflow: 'hidden', background: C.bg, fontFamily: 'inherit' }}>
       <style>{`* { box-sizing: border-box; }`}</style>
 
-      {/* ── High-Contrast, Premium Eye-Catching Top Navbar ── */}
+      {/* Navbar with Preply Name */}
       <header style={{ height: '92px', background: 'linear-gradient(to bottom, #110b24, #0e0a1a)', borderBottom: `1px solid ${C.cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 40px', flexShrink: 0, boxShadow: `0 4px 24px rgba(7, 4, 14, 0.6)` }}>
         <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           
-          {/* Enhanced Poppy Logo Section */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff', boxShadow: `0 0 20px ${C.glow}77` }}>AI</div>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff', boxShadow: `0 0 20px ${C.glow}77` }}>P</div>
               <span style={{ 
                 fontSize: '20px', 
                 fontWeight: 800, 
@@ -92,22 +91,19 @@ const Home = () => {
                 WebkitTextFillColor: 'transparent',
                 letterSpacing: '0.5px' 
               }}>
-                Interview AI
+                Preply
               </span>
             </div>
             <span style={{ fontSize: '12px', fontWeight: 600, color: '#fff', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, padding: '5px 14px', borderRadius: '20px', boxShadow: `0 2px 10px ${C.glow}44`, letterSpacing: '0.3px' }}>Dashboard</span>
           </div>
 
-          {/* User Profile Avatar */}
           <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: C.pinkLight, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 700, color: C.pink, border: `2px solid ${C.pink}55`, boxShadow: `0 0 12px ${C.pink}33` }}>R</div>
         </div>
       </header>
 
-      {/* ── Main Viewport Framework ── */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'hidden', padding: '0 40px' }}>
         <div style={{ width: '100%', maxWidth: '1200px', height: '100%', display: 'flex', flexDirection: 'column', padding: '28px 0 24px', gap: '24px' }}>
           
-          {/* Action Header Section */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${C.cardBorder}`, paddingBottom: '16px', flexShrink: 0 }}>
             <div>
               <h1 style={{ fontSize: '24px', fontWeight: 700, color: C.text, margin: 0 }}>New Interview</h1>
@@ -121,10 +117,8 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Symmetrical Cohesive Layout Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: '32px', flex: 1, minHeight: 0 }}>
 
-            {/* Left Column — Job Description */}
             <div style={{ display: 'flex', flexDirection: 'column', height: '96%' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexShrink: 0 }}>
                 <h2 style={{ fontSize: '15px', fontWeight: 600, color: C.text, margin: 0 }}>Target job description</h2>
@@ -142,12 +136,10 @@ const Home = () => {
               <div style={{ textAlign: 'right', fontSize: '11px', color: C.muted, marginTop: '4px', flexShrink: 0 }}>{jobDescription.length} / 5000</div>
             </div>
 
-            {/* Right Column — Symmetrical Input Cards */}
             <div style={{ display: 'flex', flexDirection: 'column', height: '96%' }}>
               <h2 style={{ fontSize: '15px', fontWeight: 600, color: C.text, margin: '0 0 10px', flexShrink: 0 }}>Your profile</h2>
               
               <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: '16px' }}>
-                {/* Upload Box with hover glow reactions */}
                 <label htmlFor="resume-main" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', border: `1px dashed ${C.cardBorder}`, borderRadius: '12px', background: C.cardBg, flex: 0.9, padding: '16px', cursor: 'pointer', transition: 'all 0.2s ease-in-out' }}
                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.pink; e.currentTarget.style.boxShadow = `0 0 14px ${C.pink}22`; e.currentTarget.style.background = '#120c24' }}
                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.cardBorder; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = C.cardBg }}>
@@ -163,7 +155,6 @@ const Home = () => {
                   <div style={{ flex: 1, height: '1px', background: C.cardBorder }} />
                 </div>
 
-                {/* Self Description Input */}
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1.1 }}>
                   <label style={{ fontSize: '14.5px', fontWeight: 600, color: C.text, marginBottom: '8px', flexShrink: 0 }}>Quick self-description</label>
                   <textarea
@@ -179,7 +170,6 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Bottom Action Section */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '28px', borderTop: `1px solid ${C.cardBorder}`, paddingTop: '16px', flexShrink: 0 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               {reports.length > 0 && (
@@ -198,16 +188,15 @@ const Home = () => {
                 </div>
               )}
             </div>
-
-            <button
-              onClick={handleGenerateReport}
-              style={{ display: 'flex', alignItems: 'center', gap: '10px', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, color: 'white', border: 'none', borderRadius: '10px', padding: '12px 24px', fontSize: '14.5px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: `0 4px 16px ${C.glow}33`, flexShrink: 0 }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${C.glow}44` }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 4px 16px ${C.glow}33` }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-              Generate my interview strategy
-            </button>
+                    <button
+  onClick={handleGenerateReport}
+  style={{ display: 'flex', alignItems: 'center', gap: '0px', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, color: 'white', border: 'none', borderRadius: '10px', padding: '12px 24px', fontSize: '14.5px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: `0 4px 16px ${C.glow}33`, flexShrink: 0 }}
+  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${C.glow}44` }}
+  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 4px 16px ${C.glow}33` }}
+>
+  Generate my interview strategy
+</button>
+           
           </div>
 
         </div>

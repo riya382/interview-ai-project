@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '../hooks/useAuth.js'
+import { useNavigate } from 'react-router'
 
 const C = {
   pink:       '#9333ea',
@@ -16,88 +16,84 @@ const C = {
 }
 
 const Login = () => {
-  const { loading, handleLogin } = useAuth()
-  const navigate = useNavigate()
+  const { login, loading } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    await handleLogin({ email, password })
-    navigate('/')
-  }
-
-  if (loading) {
-    return (
-      <div style={{ height: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ width: '44px', height: '44px', borderRadius: '50%', border: `3px solid ${C.cardBorder}`, borderTopColor: C.pink, animation: 'spin 0.8s linear infinite' }} />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        <p style={{ fontSize: '15px', color: C.muted }}>Signing you in...</p>
-      </div>
-    )
+    if (!email || !password) return
+    await login({ email, password })
   }
 
   const inputStyle = {
-    width: '100%', padding: '13px 16px',
-    background: C.bg, border: `1px solid ${C.cardBorder}`,
-    borderRadius: '12px', fontSize: '14px',
-    color: C.text, fontFamily: 'inherit', outline: 'none',
+    width: '100%',
+    background: C.cardBg,
+    border: `1px solid ${C.cardBorder}`,
+    borderRadius: '12px',
+    padding: '14px 16px',
+    fontSize: '14.5px',
+    color: C.text,
+    fontFamily: 'inherit',
+    outline: 'none',
+    transition: 'all 0.2s ease-in-out',
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', fontFamily: 'inherit' }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } } * { box-sizing: border-box; } ::placeholder { color: ${C.muted}; }`}</style>
+    <div style={{ minHeight: '100vh', width: '100vw', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'inherit' }}>
+      <style>{`* { box-sizing: border-box; }`}</style>
 
-      <div style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '18px', padding: '40px 36px', width: '100%', maxWidth: '420px' }}>
-
-        {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px', justifyContent: 'center' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: '#fff', boxShadow: `0 0 14px ${C.glow}66` }}>AI</div>
-          <span style={{ fontSize: '16px', fontWeight: 700, color: C.text }}>Interview AI</span>
+      <div style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '20px', padding: '40px', maxWidth: '440px', width: '100%', boxShadow: `0 8px 32px rgba(7, 4, 14, 0.8)` }}>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px', justifyContent: 'center' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff' }}>P</div>
+          <span style={{ fontSize: '20px', fontWeight: 800, background: `linear-gradient(135deg, #ffffff 30%, ${C.sub} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>Preply</span>
         </div>
 
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: C.text, textAlign: 'center', marginBottom: '6px' }}>Welcome back</h1>
-        <p style={{ fontSize: '13.5px', color: C.muted, textAlign: 'center', marginBottom: '32px' }}>Sign in to your account to continue</p>
-
-        {/* Email */}
-        <div style={{ marginBottom: '18px' }}>
-          <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: C.sub, marginBottom: '7px' }}>Email address</label>
-          <input
-            type="email" value={email} placeholder="name@example.com"
-            onChange={(e) => setEmail(e.target.value)}
-            style={inputStyle}
-            onFocus={(e) => { e.target.style.borderColor = C.pink; e.target.style.boxShadow = `0 0 0 3px ${C.pink}22` }}
-            onBlur={(e)  => { e.target.style.borderColor = C.cardBorder; e.target.style.boxShadow = 'none' }}
-          />
+        <div style={{ marginBottom: '28px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, color: C.text, margin: 0 }}>Welcome back</h2>
+          <p style={{ fontSize: '13.5px', color: C.muted, margin: '6px 0 0' }}>Sign in to your account to continue</p>
         </div>
 
-        {/* Password */}
-        <div style={{ marginBottom: '8px' }}>
-          <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: C.sub, marginBottom: '7px' }}>Password</label>
-          <input
-            type="password" value={password} placeholder="Enter your password"
-            onChange={(e) => setPassword(e.target.value)}
-            style={inputStyle}
-            onFocus={(e) => { e.target.style.borderColor = C.pink; e.target.style.boxShadow = `0 0 0 3px ${C.pink}22` }}
-            onBlur={(e)  => { e.target.style.borderColor = C.cardBorder; e.target.style.boxShadow = 'none' }}
-          />
-        </div>
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '13.5px', fontWeight: 600, color: C.text }}>Email address</label>
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" style={inputStyle} />
+          </div>
 
-        {/* Submit */}
-        <button
-          onClick={handleSubmit}
-          style={{ width: '100%', padding: '14px', marginTop: '8px', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, color: '#fff', border: 'none', borderRadius: '12px', fontSize: '15px', fontWeight: 700, cursor: 'pointer', boxShadow: `0 0 20px ${C.glow}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-          Login
-        </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '13.5px', fontWeight: 600, color: C.text }}>Password</label>
+            <div style={{ position: 'relative' }}>
+              <input type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••••••" style={inputStyle} />
+              <span onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: C.muted, cursor: 'pointer', display: 'flex' }}>
+                {showPassword ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                )}
+              </span>
+            </div>
+          </div>
 
-        <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: C.muted }}>
+          {/* Clean button without star element */}
+          <button type="submit" disabled={loading}
+            style={{ width: '100%', marginTop: '8px', padding: '14px', borderRadius: '12px', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, color: 'white', border: 'none', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.2s ease', boxShadow: `0 4px 16px ${C.glow}33` }}
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+
+        </form>
+
+        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: C.muted }}>
           Don't have an account?{' '}
-          <Link to="/register" style={{ color: C.pinkMid, fontWeight: 600, textDecoration: 'none' }}>Register</Link>
-        </p>
+          <span onClick={() => navigate('/register')} style={{ color: C.sub, fontWeight: 600, cursor: 'pointer' }}>
+            Register
+          </span>
+        </div>
+
       </div>
     </div>
   )

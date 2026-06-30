@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate, useParams } from 'react-router'
 
-// ── Design tokens perfectly matched with image_db28a1 ──────────────
 const C = {
   pink:       '#9333ea',
   pinkLight:  '#2d1254',
@@ -19,7 +18,6 @@ const C = {
   amberLight: '#1c1004',
 }
 
-// ── NAV items ─────────────────────────────────────────────────────
 const NAV_ITEMS = [
   {
     id: 'technical', label: 'Technical Questions',
@@ -35,7 +33,6 @@ const NAV_ITEMS = [
   },
 ]
 
-// ── QuestionCard ─────────────────────────────────────────────────
 const QuestionCard = ({ item, index }) => {
   const [open, setOpen] = useState(false)
   return (
@@ -124,7 +121,6 @@ const ScoreRing = ({ score }) => {
   )
 }
 
-// ── Main Component ────────────────────────────────────────────────
 const Interview = () => {
   const [activeNav, setActiveNav] = useState('technical')
   const [expandedGapIndex, setExpandedGapIndex] = useState(null)
@@ -155,28 +151,26 @@ const Interview = () => {
     <div style={{ minHeight: '100vh', background: C.bg, padding: '0', display: 'flex', flexDirection: 'column' }}>
       <style>{`* { box-sizing: border-box; }`}</style>
 
-      {/* ── Navbar Matched 100% with image_db28a1 ── */}
+      {/* Navbar with Preply Name */}
       <header style={{ height: '92px', background: 'linear-gradient(to bottom, #110b24, #0e0a1a)', borderBottom: `1px solid ${C.cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 40px', flexShrink: 0, boxShadow: `0 4px 24px rgba(7, 4, 14, 0.6)` }}>
         <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
             <div onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff', boxShadow: `0 0 20px ${C.glow}77` }}>AI</div>
-              <span style={{ fontSize: '20px', fontWeight: 800, background: `linear-gradient(135deg, #ffffff 30%, ${C.sub} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>Interview AI</span>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff' }}>P</div>
+              <span style={{ fontSize: '20px', fontWeight: 800, background: `linear-gradient(135deg, #ffffff 30%, ${C.sub} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>Preply</span>
             </div>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: '#fff', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, padding: '5px 14px', borderRadius: '20px', boxShadow: `0 2px 10px ${C.glow}44`, letterSpacing: '0.3px' }}>Strategy</span>
+            <span style={{ fontSize: '12px', fontWeight: 600, color: '#fff', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, padding: '5px 14px', borderRadius: '20px' }}>Strategy</span>
           </div>
-          <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: C.pinkLight, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 700, color: C.pink, border: `2px solid ${C.pink}55`, boxShadow: `0 0 12px ${C.pink}33` }}>R</div>
+          <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: C.pinkLight, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 700, color: C.pink, border: `2px solid ${C.pink}55` }}>R</div>
         </div>
       </header>
 
-      {/* Main Grid Context Layout */}
       <div style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '220px 1fr 250px', padding: '28px 20px', gap: '20px', minHeight: 0 }}>
 
-        {/* Left Side Navigation Panel */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <p style={{ fontSize: '11px', fontWeight: 600, color: C.muted, marginBottom: '10px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Sections</p>
           {NAV_ITEMS.map(item => (
-            <button key={item.id} onClick={() => setActiveNav(item.id)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', border: 'none', background: activeNav === item.id ? `${C.pink}22` : 'transparent', color: activeNav === item.id ? C.sub : C.muted, fontSize: '13px', fontWeight: activeNav === item.id ? 600 : 400, cursor: 'pointer', textAlign: 'left', width: '100%', transition: 'all 0.15s', boxShadow: activeNav === item.id ? `inset 0 0 0 1px ${C.pink}44` : 'none' }}>
+            <button key={item.id} onClick={() => setActiveNav(item.id)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', border: 'none', background: activeNav === item.id ? `${C.pink}22` : 'transparent', color: activeNav === item.id ? C.sub : C.muted, fontSize: '13px', fontWeight: activeNav === item.id ? 600 : 400, cursor: 'pointer', textAlign: 'left', width: '100%', transition: 'all 0.15s' }}>
               <span style={{ color: activeNav === item.id ? C.pink : C.muted }}>{item.icon}</span>
               {item.label}
             </button>
@@ -187,7 +181,6 @@ const Interview = () => {
           </div>
         </nav>
 
-        {/* Center Content Component Window */}
         <main style={{ overflowY: 'auto', paddingRight: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
             <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, margin: 0 }}>
@@ -206,7 +199,6 @@ const Interview = () => {
           {activeNav === 'roadmap' && report.preparationPlan.map((day) => <RoadMapDay key={day.day} day={day} />)}
         </main>
 
-        {/* Right Sidebar Analyser */}
         <aside style={{ borderLeft: `1px solid ${C.cardBorder}`, paddingLeft: '16px', overflowY: 'auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '24px', paddingBottom: '24px', borderBottom: `1px solid ${C.cardBorder}` }}>
             <p style={{ fontSize: '11px', fontWeight: 600, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px' }}>Match Score</p>
