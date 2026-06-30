@@ -12,8 +12,7 @@ Elevate your interview preparation to the next level with the power of Gemini AI
 
 ## 🌐 Live Demo
 
-[Preply - Live Platform Link](#) *(Add deployment link here later)*
-
+[Preply - Live Platform Link](#) 
 ---
 
 ## 📋 Table of Contents
