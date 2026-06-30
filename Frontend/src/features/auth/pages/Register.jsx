@@ -1,60 +1,144 @@
-import React,{useState} from 'react'
-import { useNavigate, Link } from 'react-router'
-import { useAuth } from '../hooks/useAuth'
+import React, { useState } from 'react'
+import { useAuth } from '../hooks/useAuth.js'
+import { useNavigate } from 'react-router'
+
+// ── Design tokens perfectly matched with image_db28a1 ──────────────
+const C = {
+  pink:       '#9333ea',
+  pinkLight:  '#2d1254',
+  pinkMid:    '#c026d3',
+  glow:       '#c026d3',
+  bg:         '#07040e',
+  cardBg:     '#0e0a1a',
+  cardBorder: '#2d1254',
+  text:       '#f5f0ff',
+  muted:      '#8878a8',
+  sub:        '#d8b4fe',
+}
 
 const Register = () => {
+  const { register, loading } = useAuth()
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
-    const navigate = useNavigate()
-    const [ username, setUsername ] = useState("")
-    const [ email, setEmail ] = useState("")
-    const [ password, setPassword ] = useState("")
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    if (!username || !email || !password) return
+    await register({ username, email, password })
+  }
 
-    const {loading,handleRegister} = useAuth()
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        await handleRegister({username,email,password})
-        navigate("/")
-    }
+  // Common input styles matching Home.jsx textarea behavior
+  const inputStyle = {
+    width: '100%',
+    background: C.cardBg,
+    border: `1px solid ${C.cardBorder}`,
+    borderRadius: '12px',
+    padding: '14px 16px',
+    paddingLeft: '44px', // Space for icons
+    fontSize: '14.5px',
+    color: C.text,
+    fontFamily: 'inherit',
+    outline: 'none',
+    transition: 'all 0.2s ease-in-out',
+  }
 
-    if(loading){
-        return (<main><h1>Loading.......</h1></main>)
-    }
+  const handleFocus = (e) => {
+    e.target.style.borderColor = C.pink
+    e.target.style.boxShadow = `0 0 16px ${C.pink}33`
+    e.target.style.background = '#120c24'
+  }
 
-    return (
-        <main>
-            <div className="form-container">
-                <h1>Register</h1>
+  const handleBlur = (e) => {
+    e.target.style.borderColor = C.cardBorder
+    e.target.style.boxShadow = 'none'
+    e.target.style.background = C.cardBg
+  }
 
-                <form onSubmit={handleSubmit}>
+  return (
+    <div style={{ minHeight: '100vh', width: '100vw', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'inherit' }}>
+      <style>{`* { box-sizing: border-box; }`}</style>
 
-                    <div className="input-group">
-                        <label htmlFor="username">Username</label>
-                        <input
-                            onChange={(e) => { setUsername(e.target.value) }}
-                            type="text" id="username" name='username' placeholder='Enter username' />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="email">Email</label>
-                        <input
-                            onChange={(e) => { setEmail(e.target.value) }}
-                            type="email" id="email" name='email' placeholder='Enter email address' />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            onChange={(e) => { setPassword(e.target.value) }}
-                            type="password" id="password" name='password' placeholder='Enter password' />
-                    </div>
+      <div style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '20px', padding: '40px', maxWidth: '440px', width: '100%', boxShadow: `0 8px 32px rgba(7, 4, 14, 0.8)` }}>
+        
+        {/* Logo Element */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px', justifyContent: 'center' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff', boxShadow: `0 0 20px ${C.glow}77` }}>AI</div>
+          <span style={{ fontSize: '20px', fontWeight: 800, background: `linear-gradient(135deg, #ffffff 30%, ${C.sub} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>Interview AI</span>
+        </div>
 
-                    <button className='button primary-button' >Register</button>
+        {/* Heading Panel */}
+        <div style={{ marginBottom: '28px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, color: C.text, margin: 0 }}>Create your <span style={{ color: C.sub }}>account</span></h2>
+          <p style={{ fontSize: '13.5px', color: C.muted, margin: '6px 0 0' }}>Sign up to get a personalized interview strategy in minutes.</p>
+        </div>
 
-                </form>
-
-                <p>Already have an account? <Link to={"/login"} >Login</Link> </p>
+        <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Username Input */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '13.5px', fontWeight: 600, color: C.text }}>Username</label>
+            <div style={{ position: 'relative' }}>
+              <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: C.muted, display: 'flex' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" required value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your username" style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
             </div>
-        </main>
-    )
+          </div>
+
+          {/* Email Input */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '13.5px', fontWeight: 600, color: C.text }}>Email</label>
+            <div style={{ position: 'relative' }}>
+              <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: C.muted, display: 'flex' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter email address" style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
+            </div>
+          </div>
+
+          {/* Password Input */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '13.5px', fontWeight: 600, color: C.text }}>Password</label>
+            <div style={{ position: 'relative' }}>
+              <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: C.muted, display: 'flex' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••••••" style={{ ...inputStyle, paddingRight: '44px' }} onFocus={handleFocus} onBlur={handleBlur} />
+              <span onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: C.muted, cursor: 'pointer', display: 'flex' }}>
+                {showPassword ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                )}
+              </span>
+            </div>
+          </div>
+
+          {/* Submit Action Button */}
+          <button type="submit" disabled={loading}
+            style={{ width: '100%', marginTop: '8px', padding: '14px', borderRadius: '12px', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, color: 'white', border: 'none', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.2s ease', boxShadow: `0 4px 16px ${C.glow}33` }}
+            onMouseEnter={(e) => { if (!loading) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${C.glow}44` } }}
+            onMouseLeave={(e) => { if (!loading) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 4px 16px ${C.glow}33` } }}
+          >
+            {loading ? 'Creating account...' : 'Register'}
+          </button>
+
+        </form>
+
+        {/* Alternate Navigation */}
+        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: C.muted }}>
+          Already have an account?{' '}
+          <span onClick={() => navigate('/login')} style={{ color: C.sub, fontWeight: 600, cursor: 'pointer', textDecoration: 'none' }} onMouseEnter={(e) => e.target.style.textDecoration = 'underline'} onMouseLeave={(e) => e.target.style.textDecoration = 'none'}>
+            Login
+          </span>
+        </div>
+
+      </div>
+    </div>
+  )
 }
 
 export default Register

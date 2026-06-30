@@ -1,202 +1,255 @@
 import React, { useState, useEffect } from 'react'
-import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate, useParams } from 'react-router'
 
-
-
-const NAV_ITEMS = [
-    { id: 'technical', label: 'Technical Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>) },
-    { id: 'behavioral', label: 'Behavioral Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>) },
-    { id: 'roadmap', label: 'Road Map', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>) },
-]
-
-// ── Sub-components ────────────────────────────────────────────────────────────
-const QuestionCard = ({ item, index }) => {
-    const [ open, setOpen ] = useState(false)
-    return (
-        <div className='q-card'>
-            <div className='q-card__header' onClick={() => setOpen(o => !o)}>
-                <span className='q-card__index'>Q{index + 1}</span>
-                <p className='q-card__question'>{item.question}</p>
-                <span className={`q-card__chevron ${open ? 'q-card__chevron--open' : ''}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-                </span>
-            </div>
-            {open && (
-                <div className='q-card__body'>
-                    <div className='q-card__section'>
-                        <span className='q-card__tag q-card__tag--intention'>Intention</span>
-                        <p>{item.intention}</p>
-                    </div>
-                    <div className='q-card__section'>
-                        <span className='q-card__tag q-card__tag--answer'>Model Answer</span>
-                        <p>{item.answer}</p>
-                    </div>
-                </div>
-            )}
-        </div>
-    )
+// ── Design tokens perfectly matched with image_db28a1 ──────────────
+const C = {
+  pink:       '#9333ea',
+  pinkLight:  '#2d1254',
+  pinkMid:    '#c026d3',
+  glow:       '#c026d3',
+  bg:         '#07040e',
+  cardBg:     '#0e0a1a',
+  cardBorder: '#2d1254',
+  text:       '#f5f0ff',
+  muted:      '#8878a8',
+  sub:        '#d8b4fe',
+  greenLight: '#052e16',
+  greenText:  '#4ade80',
+  amberLight: '#1c1004',
 }
 
-const RoadMapDay = ({ day }) => (
-    <div className='roadmap-day'>
-        <div className='roadmap-day__header'>
-            <span className='roadmap-day__badge'>Day {day.day}</span>
-            <h3 className='roadmap-day__focus'>{day.focus}</h3>
+// ── NAV items ─────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  {
+    id: 'technical', label: 'Technical Questions',
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>,
+  },
+  {
+    id: 'behavioral', label: 'Behavioral Questions',
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>,
+  },
+  {
+    id: 'roadmap', label: 'Road Map',
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>,
+  },
+]
+
+// ── QuestionCard ─────────────────────────────────────────────────
+const QuestionCard = ({ item, index }) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <div style={{
+      background: C.cardBg, borderRadius: '14px',
+      border: `1px solid ${open ? C.pink : C.cardBorder}`,
+      overflow: 'hidden', transition: 'border-color 0.2s, box-shadow 0.2s',
+      width: '100%', marginBottom: '10px',
+      boxShadow: open ? `0 0 20px ${C.glow}30` : 'none',
+    }}>
+      <div onClick={() => setOpen(o => !o)} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', padding: '18px 20px', cursor: 'pointer' }}>
+        <span style={{
+          minWidth: '32px', height: '32px', borderRadius: '10px',
+          background: open ? C.pink : `${C.pink}22`,
+          color: open ? '#fff' : C.sub,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '12px', fontWeight: 700, flexShrink: 0,
+          boxShadow: open ? `0 0 10px ${C.glow}66` : 'none',
+          transition: 'all 0.2s',
+        }}>Q{index + 1}</span>
+        <p style={{ flex: 1, fontSize: '14px', color: C.text, margin: 0, lineHeight: 1.6, paddingTop: '5px' }}>{item.question}</p>
+        <span style={{ color: C.pink, transition: 'transform 0.2s', flexShrink: 0, marginTop: '7px', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+        </span>
+      </div>
+      {open && (
+        <div style={{ borderTop: `1px solid ${C.cardBorder}`, padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: C.sub, background: `${C.pink}22`, padding: '3px 9px', borderRadius: '20px' }}>Intention</span>
+            <p style={{ fontSize: '13px', color: C.muted, marginTop: '10px', lineHeight: 1.7 }}>{item.intention}</p>
+          </div>
+          <div>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: C.greenText, background: C.greenLight, padding: '3px 9px', borderRadius: '20px' }}>Model Answer</span>
+            <p style={{ fontSize: '13px', color: C.muted, marginTop: '10px', lineHeight: 1.7 }}>{item.answer}</p>
+          </div>
         </div>
-        <ul className='roadmap-day__tasks'>
-            {day.tasks.map((task, i) => (
-                <li key={i}>
-                    <span className='roadmap-day__bullet' />
-                    {task}
-                </li>
-            ))}
-        </ul>
+      )}
     </div>
+  )
+}
+
+const QuestionList = ({ items }) => (
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    {items.map((q, i) => <QuestionCard key={i} item={q} index={i} />)}
+  </div>
 )
 
-// ── Main Component ────────────────────────────────────────────────────────────
+const RoadMapDay = ({ day }) => (
+  <div style={{ background: C.cardBg, borderRadius: '14px', border: `1px solid ${C.cardBorder}`, padding: '18px 20px', marginBottom: '10px', borderLeft: `4px solid ${C.pink}`, boxShadow: `0 0 16px ${C.glow}18` }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+      <span style={{ background: C.pink, color: 'white', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, boxShadow: `0 0 10px ${C.glow}55` }}>Day {day.day}</span>
+      <h3 style={{ fontSize: '14px', fontWeight: 600, color: C.text, margin: 0 }}>{day.focus}</h3>
+    </div>
+    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      {day.tasks.map((task, i) => (
+        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', color: C.muted, lineHeight: 1.5 }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: C.pink, flexShrink: 0, marginTop: '6px', boxShadow: `0 0 6px ${C.glow}` }} />
+          {task}
+        </li>
+      ))}
+    </ul>
+  </div>
+)
+
+const ScoreRing = ({ score }) => {
+  const r = 52
+  const circ = 2 * Math.PI * r
+  const offset = circ * (1 - score / 100)
+  const color = score >= 80 ? C.greenText : score >= 60 ? '#fcd34d' : C.pink
+  return (
+    <div style={{ position: 'relative', width: '130px', height: '130px' }}>
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <defs><filter id="scoreGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <circle cx="65" cy="65" r={r} fill="none" stroke={C.cardBorder} strokeWidth="10" />
+        <circle cx="65" cy="65" r={r} fill="none" stroke={color} strokeWidth="10"
+          strokeDasharray={circ} strokeDashoffset={offset}
+          strokeLinecap="round" transform="rotate(-90 65 65)"
+          filter="url(#scoreGlow)"
+        />
+      </svg>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center' }}>
+        <div style={{ fontSize: '28px', fontWeight: 700, color: C.text }}>{score}</div>
+        <div style={{ fontSize: '11px', color: C.muted }}>%</div>
+      </div>
+    </div>
+  )
+}
+
+// ── Main Component ────────────────────────────────────────────────
 const Interview = () => {
-    const [ activeNav, setActiveNav ] = useState('technical')
-    const { report, getReportById, loading, getResumePdf } = useInterview()
-    const { interviewId } = useParams()
-    const navigate = useNavigate()
+  const [activeNav, setActiveNav] = useState('technical')
+  const [expandedGapIndex, setExpandedGapIndex] = useState(null)
 
-    useEffect(() => {
-        if (interviewId) {
-            getReportById(interviewId)
-        }
-    }, [ interviewId ])
+  const { report, getReportById, loading, getResumePdf } = useInterview()
+  const { interviewId } = useParams()
+  const navigate = useNavigate()
 
+  useEffect(() => { if (interviewId) getReportById(interviewId) }, [interviewId])
 
-
-    if (loading || !report) {
-        return (
-            <main className='loading-screen'>
-                <h1>Loading your interview plan...</h1>
-            </main>
-        )
-    }
-
-    const scoreColor =
-        report.matchScore >= 80 ? 'score--high' :
-            report.matchScore >= 60 ? 'score--mid' : 'score--low'
-
-
+  if (loading || !report) {
     return (
-        <div className='interview-page'>
-            <div className='interview-layout'>
-
-                {/* ── Left Nav ── */}
-                <nav className='interview-nav'>
-                    <div className="nav-content">
-                        <p className='interview-nav__label'>Sections</p>
-                        {NAV_ITEMS.map(item => (
-                            <button
-                                key={item.id}
-                                className={`interview-nav__item ${activeNav === item.id ? 'interview-nav__item--active' : ''}`}
-                                onClick={() => setActiveNav(item.id)}
-                            >
-                                <span className='interview-nav__icon'>{item.icon}</span>
-                                {item.label}
-                            </button>
-                        ))}
-                    </div>
-                    <button
-                        onClick={() => { getResumePdf(interviewId) }}
-                        className='button primary-button' >
-                        <svg height={"0.8rem"} style={{ marginRight: "0.8rem" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956ZM19.4014 22.6899 19.6482 22.1242C20.0882 21.1156 20.8807 20.3125 21.8695 19.8732L22.6299 19.5353C23.0412 19.3526 23.0412 18.7549 22.6299 18.5722L21.9121 18.2532C20.8978 17.8026 20.0911 16.9698 19.6586 15.9269L19.4052 15.3156C19.2285 14.8896 18.6395 14.8896 18.4628 15.3156L18.2094 15.9269C17.777 16.9698 16.9703 17.8026 15.956 18.2532L15.2381 18.5722C14.8269 18.7549 14.8269 19.3526 15.2381 19.5353L15.9985 19.8732C16.9874 20.3125 17.7798 21.1156 18.2198 22.1242L18.4667 22.6899C18.6473 23.104 19.2207 23.104 19.4014 22.6899Z"></path></svg>
-                        Download Resume
-                    </button>
-                
-                <button onClick={() => { navigate(`/mock-interview/${interviewId}`)
-                      }}
-                   className='button primary-button'
-                     style={{ marginTop: "1rem" }}>
-                  Start Mock Interview
-                 </button>
-                  </nav>
-                <div className='interview-divider' />
-
-                {/* ── Center Content ── */}
-                <main className='interview-content'>
-                    {activeNav === 'technical' && (
-                        <section>
-                            <div className='content-header'>
-                                <h2>Technical Questions</h2>
-                                <span className='content-header__count'>{report.technicalQuestions.length} questions</span>
-                            </div>
-                            <div className='q-list'>
-                                {report.technicalQuestions.map((q, i) => (
-                                    <QuestionCard key={i} item={q} index={i} />
-                                ))}
-                            </div>
-                        </section>
-                    )}
-
-                    {activeNav === 'behavioral' && (
-                        <section>
-                            <div className='content-header'>
-                                <h2>Behavioral Questions</h2>
-                                <span className='content-header__count'>{report.behavioralQuestions.length} questions</span>
-                            </div>
-                            <div className='q-list'>
-                                {report.behavioralQuestions.map((q, i) => (
-                                    <QuestionCard key={i} item={q} index={i} />
-                                ))}
-                            </div>
-                        </section>
-                    )}
-
-                    {activeNav === 'roadmap' && (
-                        <section>
-                            <div className='content-header'>
-                                <h2>Preparation Road Map</h2>
-                                <span className='content-header__count'>{report.preparationPlan.length}-day plan</span>
-                            </div>
-                            <div className='roadmap-list'>
-                                {report.preparationPlan.map((day) => (
-                                    <RoadMapDay key={day.day} day={day} />
-                                ))}
-                            </div>
-                        </section>
-                    )}
-                </main>
-
-                <div className='interview-divider' />
-
-                {/* ── Right Sidebar ── */}
-                <aside className='interview-sidebar'>
-
-                    {/* Match Score */}
-                    <div className='match-score'>
-                        <p className='match-score__label'>Match Score</p>
-                        <div className={`match-score__ring ${scoreColor}`}>
-                            <span className='match-score__value'>{report.matchScore}</span>
-                            <span className='match-score__pct'>%</span>
-                        </div>
-                        <p className='match-score__sub'>Strong match for this role</p>
-                    </div>
-
-                    <div className='sidebar-divider' />
-
-                    {/* Skill Gaps */}
-                    <div className='skill-gaps'>
-                        <p className='skill-gaps__label'>Skill Gaps</p>
-                        <div className='skill-gaps__list'>
-                            {report.skillGaps.map((gap, i) => (
-                                <span key={i} className={`skill-tag skill-tag--${gap.severity}`}>
-                                    {gap.skill}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                </aside>
-            </div>
-        </div>
+      <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ width: '44px', height: '44px', borderRadius: '50%', border: `3px solid ${C.cardBorder}`, borderTopColor: C.pink, animation: 'spin 0.8s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        <p style={{ fontSize: '16px', color: C.muted }}>Loading your interview blueprint...</p>
+      </div>
     )
+  }
+
+  const severityColor = (sev) => {
+    if (sev === 'high')   return { bg: C.amberLight,   text: '#fcd34d' }
+    if (sev === 'medium') return { bg: `${C.pink}18`, text: C.sub }
+    return                       { bg: C.greenLight,  text: C.greenText }
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', background: C.bg, padding: '0', display: 'flex', flexDirection: 'column' }}>
+      <style>{`* { box-sizing: border-box; }`}</style>
+
+      {/* ── Navbar Matched 100% with image_db28a1 ── */}
+      <header style={{ height: '92px', background: 'linear-gradient(to bottom, #110b24, #0e0a1a)', borderBottom: `1px solid ${C.cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 40px', flexShrink: 0, boxShadow: `0 4px 24px rgba(7, 4, 14, 0.6)` }}>
+        <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+            <div onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff', boxShadow: `0 0 20px ${C.glow}77` }}>AI</div>
+              <span style={{ fontSize: '20px', fontWeight: 800, background: `linear-gradient(135deg, #ffffff 30%, ${C.sub} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.5px' }}>Interview AI</span>
+            </div>
+            <span style={{ fontSize: '12px', fontWeight: 600, color: '#fff', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, padding: '5px 14px', borderRadius: '20px', boxShadow: `0 2px 10px ${C.glow}44`, letterSpacing: '0.3px' }}>Strategy</span>
+          </div>
+          <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: C.pinkLight, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 700, color: C.pink, border: `2px solid ${C.pink}55`, boxShadow: `0 0 12px ${C.pink}33` }}>R</div>
+        </div>
+      </header>
+
+      {/* Main Grid Context Layout */}
+      <div style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '220px 1fr 250px', padding: '28px 20px', gap: '20px', minHeight: 0 }}>
+
+        {/* Left Side Navigation Panel */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <p style={{ fontSize: '11px', fontWeight: 600, color: C.muted, marginBottom: '10px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Sections</p>
+          {NAV_ITEMS.map(item => (
+            <button key={item.id} onClick={() => setActiveNav(item.id)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', border: 'none', background: activeNav === item.id ? `${C.pink}22` : 'transparent', color: activeNav === item.id ? C.sub : C.muted, fontSize: '13px', fontWeight: activeNav === item.id ? 600 : 400, cursor: 'pointer', textAlign: 'left', width: '100%', transition: 'all 0.15s', boxShadow: activeNav === item.id ? `inset 0 0 0 1px ${C.pink}44` : 'none' }}>
+              <span style={{ color: activeNav === item.id ? C.pink : C.muted }}>{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: 'auto', paddingBottom: '16px' }}>
+            <button onClick={() => getResumePdf(interviewId)} style={{ width: '100%', padding: '11px 16px', borderRadius: '10px', background: `linear-gradient(135deg, ${C.pinkMid}, ${C.pink})`, color: 'white', border: 'none', fontSize: '13px', fontWeight: 700, cursor: 'pointer', boxShadow: `0 4px 14px ${C.glow}33` }}>Download Resume</button>
+            <button onClick={() => navigate(`/mock-interview/${interviewId}`)} style={{ width: '100%', padding: '11px 16px', borderRadius: '10px', background: 'transparent', color: C.sub, border: `1.5px solid ${C.pink}`, fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>Start Mock Interview</button>
+          </div>
+        </nav>
+
+        {/* Center Content Component Window */}
+        <main style={{ overflowY: 'auto', paddingRight: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 700, color: C.text, margin: 0 }}>
+              {activeNav === 'technical' && 'Technical Questions'}
+              {activeNav === 'behavioral' && 'Behavioral Questions'}
+              {activeNav === 'roadmap' && 'Preparation Road Map'}
+            </h2>
+            <span style={{ background: `${C.pink}22`, color: C.sub, padding: '3px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500, border: `1px solid ${C.pink}44` }}>
+              {activeNav === 'technical' && `${report.technicalQuestions.length} questions`}
+              {activeNav === 'behavioral' && `${report.behavioralQuestions.length} questions`}
+              {activeNav === 'roadmap' && `${report.preparationPlan.length}-day plan`}
+            </span>
+          </div>
+          {activeNav === 'technical' && <QuestionList items={report.technicalQuestions} />}
+          {activeNav === 'behavioral' && <QuestionList items={report.behavioralQuestions} />}
+          {activeNav === 'roadmap' && report.preparationPlan.map((day) => <RoadMapDay key={day.day} day={day} />)}
+        </main>
+
+        {/* Right Sidebar Analyser */}
+        <aside style={{ borderLeft: `1px solid ${C.cardBorder}`, paddingLeft: '16px', overflowY: 'auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px', paddingBottom: '24px', borderBottom: `1px solid ${C.cardBorder}` }}>
+            <p style={{ fontSize: '11px', fontWeight: 600, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px' }}>Match Score</p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}><ScoreRing score={report.matchScore} /></div>
+            <p style={{ fontSize: '12px', color: report.matchScore >= 80 ? C.greenText : '#fcd34d', fontWeight: 500 }}>
+              {report.matchScore >= 80 ? 'Strong match' : report.matchScore >= 60 ? 'Good match' : 'Partial match'}
+            </p>
+          </div>
+          
+          <div>
+            <p style={{ fontSize: '11px', fontWeight: 600, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '14px' }}>Skill Gaps</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {report.skillGaps.map((gap, i) => {
+                const isGapOpen = expandedGapIndex === i
+                const { bg, text } = severityColor(gap.severity)
+                
+                return (
+                  <div key={i} onClick={() => setExpandedGapIndex(isGapOpen ? null : i)} style={{ background: bg, borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', border: isGapOpen ? `1px solid ${C.pink}` : '1px solid transparent', transition: 'all 0.15s ease-in-out', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                      <span style={{ color: text, fontSize: '12.5px', fontWeight: 600, lineHeight: 1.3 }}>{gap.skill}</span>
+                      <span style={{ color: text, fontSize: '10px', transform: isGapOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }}>▼</span>
+                    </div>
+                    {isGapOpen && (
+                      <div style={{ fontSize: '13px', color: C.text, lineHeight: '1.6', paddingTop: '10px', borderTop: `1px solid ${text}33`, marginTop: '8px', whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'left' }}>
+                        <span style={{ fontWeight: 700, color: C.sub, display: 'block', marginBottom: '6px' }}>💡 Recommendation:</span>
+                        {gap.solution || gap.recommendation || (
+                          /frontend|react|ui|css|figma/i.test(gap.skill) ? `Build functional components specializing in modular core patterns using ${gap.skill}. Highlight specific UX layout milestones.` :
+                          /testing|jest|mocha|qa/i.test(gap.skill) ? `Configure rigorous validation routines inside localized test scenarios for ${gap.skill}. Implement strict assertion rules.` :
+                          /docker|ansible|ci\/cd|pipeline|aws|cloud/i.test(gap.skill) ? `Orchestrate continuous deployment tasks using specific ${gap.skill} templates. Verify target host playbooks.` :
+                          `Create dedicated reference repositories targeting core logic optimization using ${gap.skill}. Keep records of performance benchmarks.`
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  )
 }
 
 export default Interview
